@@ -33,7 +33,10 @@ class App:
         self.canvas = tkinter.Canvas(self.root, background=self.bg_color, height=600, width=800)
         self.canvas.pack(anchor="center", expand=1)
 
-        self.rectangle = Rectangle(0, 0, 100, 50, 5, 5)
+        self.rectangles = []
+
+    def add_rectangle(self, x, y, width, height, v_x, v_y):
+        self.rectangles.append(Rectangle(x, y, width, height, v_x, v_y))
 
     def draw_rectangle(self, rectangle, color):
         self.canvas.create_rectangle(rectangle.x, rectangle.y,
@@ -41,21 +44,25 @@ class App:
                                      fill=color, outline=color)
 
     def start(self):
-        color = random.choice(['white', 'black', 'red', 'green', 'blue', 'cyan', 'yellow', 'magenta'])
-        self.draw_rectangle(self.rectangle, color)
+        for rectangle in self.rectangles:
+            color = random.choice(['white', 'black', 'red', 'green', 'blue', 'cyan', 'yellow', 'magenta'])
+            self.draw_rectangle(rectangle, color)
         self.move()
         self.root.mainloop()
 
     def move(self):
-        self.draw_rectangle(self.rectangle, self.bg_color)
-        self.rectangle.move()
-        self.draw_rectangle(self.rectangle, self.bg_color)
+        for rectangle in self.rectangles:
+            self.draw_rectangle(rectangle, self.bg_color)
+            rectangle.move()
+            self.draw_rectangle(rectangle, self.bg_color)
 
-        color = random.choice(['white', 'black', 'red', 'green', 'blue', 'cyan', 'yellow', 'magenta'])
-        self.draw_rectangle(self.rectangle, color)
+            color = random.choice(['white', 'black', 'red', 'green', 'blue', 'cyan', 'yellow', 'magenta'])
+            self.draw_rectangle(rectangle, color)
 
         self.root.after(16, self.move)
 
 
 app = App()
+app.add_rectangle(0, 0, 100, 50, 5, 5)
+app.add_rectangle(700, 0, 100, 50, -5, 5)
 app.start()
