@@ -1,3 +1,4 @@
+import math
 import random
 import tkinter
 
@@ -12,54 +13,47 @@ class Rectangle:
         self.v_y = v_y
         self.mass = width * height
 
-    def move(self):
-        self.x += self.v_x
-        self.y += self.v_y
+    def move(self, rectangles):
+        # Обновление координат прямоугольника
+        old_x = self.x
+        old_y = self.y
+        self.x = self.x + self.v_x
+        self.y = self.y + self.v_y
 
-        x_out, y_out = self.out_of_bound()
-        while x_out != 0 or y_out != 0:
-            # вычисляем обратный шаг и меняем направление на будущее
-            if abs(x_out) > abs(y_out):
-                y_out = x_out * self.v_y / self.v_x
-                self.v_x *= -1
-                dx = -x_out
-                dy = y_out
-            else:
-                x_out = self.v_x * y_out / self.v_y
-                self.v_y *= -1
-                dx = x_out
-                dy = -y_out
+        # Проверка столкновения с границами поля
+        if self.x < 0 or self.x + self.width > 400:
+            self.v_x *= -1  # Изменение направления по x
+        if self.y < 0 or self.y + self.height > 300:
+            self.v_y *= -1  # Изменение направления по y
 
-            # шагаем в обратную сторону
-            self.x -= x_out
-            self.y -= y_out
+        # Проверка столкновения с другими прямоугольниками
+        for other_rect in rectangles:
+            if self is not other_rect:  # Исключаем текущий прямоугольник из проверки
+                if self.intersects(other_rect):
+                    # Вычисление вектора между центрами столкновения
+                    collision_vector = (other_rect.x - (2*self.x + self.width) / 2,
+                                        other_rect.y - (2*self.y + self.height) / 2)
+                    # Нормализация вектора
+                    length = math.sqrt(collision_vector[0]**2 + collision_vector[1]**2)
+                    collision_vector = (collision_vector[0] / length, collision_vector[1] / length)
+                    # Вычисление нового вектора скорости после столкновения
+                    dot_product = self.v_x * collision_vector[0] + self.v_y * collision_vector[1]
+                    self.v_x -= 2 * dot_product * collision_vector[0]
+                    self.v_y -= 2 * dot_product * collision_vector[1]
 
-            self.x += dx
-            self.y += dy
-
-            x_out, y_out = self.out_of_bound()
+        # Проверка столкновения с другими прямоугольниками после обновления
+        for other_rect in rectangles:
+            if self is not other_rect:  # Исключаем текущий прямоугольник из проверки
+                if self.intersects(other_rect):
+                    # Вернуть прямоугольнику старые координаты
+                    self.x = old_x
+                    self.y = old_y
 
     def intersects(self, other):
-        rect1_x = self.x
-        rect1_y = self.y
-        rect1_right = self.x + self.width
-        rect1_bottom = self.y + self.height
-
-        rect2_x = other.x
-        rect2_y = other.y
-        rect2_right = other.x + other.width
-        rect2_bottom = other.y + other.height
-
-        if (self.x < other.x + other.width and
+        return (self.x < other.x + other.width and
                 self.x + self.width > other.x and
                 self.y < other.y + other.height and
-                self.y + self.height > other.y):
-            x_overlap = min(rect1_right, rect2_right) - max(rect1_x, rect2_x)
-            y_overlap = min(rect1_bottom, rect2_bottom) - max(rect1_y, rect2_y)
-
-            return x_overlap, y_overlap
-
-        return 0, 0
+                self.y + self.height > other.y)
 
     def out_of_bound(self):
         x, y = 0, 0
@@ -95,28 +89,29 @@ class App:
     def draw_rectangle(self, rectangle, color):
         self.canvas.create_rectangle(rectangle.x, rectangle.y,
                                      rectangle.x + rectangle.width, rectangle.y + rectangle.height,
-                                     fill=color, outline=color)
+                                     fill=color, outline=color, tags='rectangles')
 
     def start(self):
         for rectangle in self.rectangles:
             color = random.choice(['white', 'black', 'red', 'green', 'blue', 'cyan', 'yellow', 'magenta'])
             self.draw_rectangle(rectangle, color)
-        self.move()
+        self.update()
         self.root.mainloop()
 
-    def move(self):
+    def update(self):
+        self.canvas.delete('rectangles')
         for rectangle in self.rectangles:
             self.draw_rectangle(rectangle, self.bg_color)
-            rectangle.move()
+            rectangle.move(self.rectangles)
             self.draw_rectangle(rectangle, self.bg_color)
 
             color = random.choice(['white', 'black', 'red', 'green', 'blue', 'cyan', 'yellow', 'magenta'])
             self.draw_rectangle(rectangle, color)
 
-        self.root.after(50, self.move)
+        self.root.after(10, self.update)
 
 
 app = App()
-app.add_rectangle(0, 0, 100, 50, 53, 82)
-app.add_rectangle(700, 0, 100, 50, -72, 13)
+app.add_rectangle(0, 0, 50, 25, 2, 3)
+app.add_rectangle(300, 0, 50, 25, -2, 2)
 app.start()
