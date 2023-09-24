@@ -66,13 +66,13 @@ class Rectangle:
 
         if self.x < 0:
             x = self.x
-        elif self.x + self.width > 800:
-            x = self.x + self.width - 800
+        elif self.x + self.width > 400:
+            x = self.x + self.width - 400
 
         if self.y < 0:
             y = self.y
-        elif self.y + self.height > 600:
-            y = self.y + self.height - 600
+        elif self.y + self.height > 300:
+            y = self.y + self.height - 300
 
         return x, y
 
@@ -80,11 +80,11 @@ class Rectangle:
 class App:
     def __init__(self):
         self.root = tkinter.Tk()
-        self.root.geometry("800x600")
+        self.root.geometry("400x300")
         self.root.resizable(False, False)
         self.bg_color = "#C4C4C4"
 
-        self.canvas = tkinter.Canvas(self.root, background=self.bg_color, height=600, width=800)
+        self.canvas = tkinter.Canvas(self.root, background=self.bg_color, height=300, width=400)
         self.canvas.pack(anchor="center", expand=1)
 
         self.rectangles = []
