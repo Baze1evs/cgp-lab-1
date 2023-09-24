@@ -34,8 +34,8 @@ class Rectangle:
             dx -= x_out
             dy -= y_out
 
-            self.x += dx
-            self.y += dy
+            self.x += dx if self.v_x > 0 else -dx
+            self.y += dy if self.v_y > 0 else -dy
 
             x_out, y_out = self.out_of_bound()
 
@@ -113,10 +113,10 @@ class App:
             color = random.choice(['white', 'black', 'red', 'green', 'blue', 'cyan', 'yellow', 'magenta'])
             self.draw_rectangle(rectangle, color)
 
-        self.root.after(16, self.move)
+        self.root.after(50, self.move)
 
 
 app = App()
-app.add_rectangle(0, 0, 100, 50, 5, 5)
-app.add_rectangle(700, 0, 100, 50, -5, 5)
+app.add_rectangle(0, 0, 100, 50, 53, 82)
+app.add_rectangle(700, 0, 100, 50, -72, 13)
 app.start()
