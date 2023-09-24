@@ -16,26 +16,26 @@ class Rectangle:
         self.x += self.v_x
         self.y += self.v_y
 
-        dx, dy = self.v_x, self.v_y
-
         x_out, y_out = self.out_of_bound()
-        while (x_out != 0 or y_out != 0) and (dx != 0 or dy != 0):
+        while x_out != 0 or y_out != 0:
             # вычисляем обратный шаг и меняем направление на будущее
             if abs(x_out) > abs(y_out):
                 y_out = x_out * self.v_y / self.v_x
                 self.v_x *= -1
+                dx = -x_out
+                dy = y_out
             else:
                 x_out = self.v_x * y_out / self.v_y
                 self.v_y *= -1
+                dx = x_out
+                dy = -y_out
 
             # шагаем в обратную сторону
             self.x -= x_out
             self.y -= y_out
-            dx -= x_out
-            dy -= y_out
 
-            self.x += dx if self.v_x > 0 else -dx
-            self.y += dy if self.v_y > 0 else -dy
+            self.x += dx
+            self.y += dy
 
             x_out, y_out = self.out_of_bound()
 
