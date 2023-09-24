@@ -25,15 +25,15 @@ class Rectangle:
     def out_of_bound(self):
         x, y = 0, 0
 
-        if x < 0:
-            x = -self.x
-        elif x > 800:
-            x = 800 - self.x
+        if self.x < 0:
+            x = self.x
+        elif self.x + self.width > 800:
+            x = self.x + self.width - 800
 
-        if y < 0:
-            y = -self.y
-        elif y > 600:
-            y = 600 - self.y
+        if self.y < 0:
+            y = self.y
+        elif self.y + self.height > 600:
+            y = self.y + self.height - 600
 
         return x, y
 
