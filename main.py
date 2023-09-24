@@ -29,24 +29,24 @@ class App:
 
         self.rectangle = Rectangle(0, 0, 100, 50, 5, 5)
 
-    def create_rectangle(self, rectangle, color):
+    def draw_rectangle(self, rectangle, color):
         self.canvas.create_rectangle(rectangle.x, rectangle.y,
                                      rectangle.x + rectangle.width, rectangle.y + rectangle.height,
                                      fill=color, outline=color)
 
     def start(self):
         color = random.choice(['white', 'black', 'red', 'green', 'blue', 'cyan', 'yellow', 'magenta'])
-        self.create_rectangle(self.rectangle, color)
+        self.draw_rectangle(self.rectangle, color)
         self.move()
         self.root.mainloop()
 
     def move(self):
-        self.create_rectangle(self.rectangle, bg_color)
+        self.draw_rectangle(self.rectangle, self.bg_color)
         self.rectangle.move()
-        self.create_rectangle(self.rectangle, bg_color)
+        self.draw_rectangle(self.rectangle, self.bg_color)
 
         color = random.choice(['white', 'black', 'red', 'green', 'blue', 'cyan', 'yellow', 'magenta'])
-        self.create_rectangle(self.rectangle, color)
+        self.draw_rectangle(self.rectangle, color)
 
         self.root.after(16, self.move)
 
