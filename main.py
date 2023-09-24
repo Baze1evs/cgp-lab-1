@@ -16,6 +16,12 @@ class Rectangle:
         self.x += self.v_x
         self.y += self.v_y
 
+    def intersects(self, other):
+        return (self.y < (other.y + other.height) or
+                (self.y + self.height) > other.y or
+                (self.x + self.width) < other.x or
+                self.x > (other.x + other.width))
+
 
 class App:
     def __init__(self):
