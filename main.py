@@ -17,10 +17,26 @@ class Rectangle:
         self.y += self.v_y
 
     def intersects(self, other):
-        return (self.x < other.x + other.width and
+        rect1_x = self.x
+        rect1_y = self.y
+        rect1_right = self.x + self.width
+        rect1_bottom = self.y + self.height
+
+        rect2_x = other.x
+        rect2_y = other.y
+        rect2_right = other.x + other.width
+        rect2_bottom = other.y + other.height
+
+        if (self.x < other.x + other.width and
                 self.x + self.width > other.x and
                 self.y < other.y + other.height and
-                self.y + self.height > other.y)
+                self.y + self.height > other.y):
+            x_overlap = min(rect1_right, rect2_right) - max(rect1_x, rect2_x)
+            y_overlap = min(rect1_bottom, rect2_bottom) - max(rect1_y, rect2_y)
+
+            return x_overlap, y_overlap
+
+        return 0, 0
 
     def out_of_bound(self):
         x, y = 0, 0
