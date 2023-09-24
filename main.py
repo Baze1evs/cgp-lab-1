@@ -29,27 +29,24 @@ class App:
 
         self.rectangle = Rectangle(0, 0, 100, 50, 5, 5)
 
+    def create_rectangle(self, rectangle, color):
+        self.canvas.create_rectangle(rectangle.x, rectangle.y,
+                                     rectangle.x + rectangle.width, rectangle.y + rectangle.height,
+                                     fill=color, outline=color)
+
     def start(self):
         color = random.choice(['white', 'black', 'red', 'green', 'blue', 'cyan', 'yellow', 'magenta'])
-        self.canvas.create_rectangle(self.rectangle.x, self.rectangle.y,
-                                     self.rectangle.x + self.rectangle.width, self.rectangle.y + self.rectangle.height,
-                                     fill=color, outline=color)
+        self.create_rectangle(self.rectangle, color)
         self.move()
         self.root.mainloop()
 
     def move(self):
-        self.canvas.create_rectangle(self.rectangle.x, self.rectangle.y,
-                                     self.rectangle.x + self.rectangle.width, self.rectangle.y + self.rectangle.height,
-                                     fill=self.bg_color, outline=self.bg_color)
+        self.create_rectangle(self.rectangle, bg_color)
         self.rectangle.move()
-        self.canvas.create_rectangle(self.rectangle.x, self.rectangle.y,
-                                     self.rectangle.x + self.rectangle.width, self.rectangle.y + self.rectangle.height,
-                                     fill=self.bg_color, outline=self.bg_color)
+        self.create_rectangle(self.rectangle, bg_color)
 
         color = random.choice(['white', 'black', 'red', 'green', 'blue', 'cyan', 'yellow', 'magenta'])
-        self.canvas.create_rectangle(self.rectangle.x, self.rectangle.y,
-                                     self.rectangle.x + self.rectangle.width, self.rectangle.y + self.rectangle.height,
-                                     fill=color, outline=color)
+        self.create_rectangle(self.rectangle, color)
 
         self.root.after(16, self.move)
 
