@@ -15,7 +15,6 @@ class Rectangle:
         self.height = height
         self.v_x = v_x
         self.v_y = v_y
-        self.mass = width * height
 
     def move(self, rectangles):
         # Обновление координат прямоугольника
@@ -35,21 +34,23 @@ class Rectangle:
             if self is not other_rect:  # Исключаем текущий прямоугольник из проверки
                 if self.intersects(other_rect):
                     # Вычисление вектора между центрами столкновения
-                    collision_vector = (other_rect.x - (2*self.x + self.width) / 2,
-                                        other_rect.y - (2*self.y + self.height) / 2)
+                    collision_vector = ((2 * self.x + self.width) / 2 - (2 * other_rect.x + other_rect.width) / 2,
+                                        (2 * self.y + self.height) / 2 - (2 * other_rect.y + other_rect.height) / 2)
                     # Нормализация вектора
-                    length = math.sqrt(collision_vector[0]**2 + collision_vector[1]**2)
-                    collision_vector = (collision_vector[0] / length, collision_vector[1] / length)
+                    length = vector_length(collision_vector)
+                    norm_vector = (collision_vector[0] / length, collision_vector[1] / length)
+                    # Вычисление длины вектора текущей скорости
+                    v_len = vector_length((self.v_x, self.v_y))
+                    # Вычисление косинуса угла между текущим вектором скорости и вектором приращения
+                    cosa = -(norm_vector[0] * self.v_x + norm_vector[1] * self.v_y) / v_len
+                    # Вычисление длины вектора приращения
+                    dv_len = math.sqrt(2 * v_len**2 - 2 * v_len * (1 - 2 * cosa**2))
+                    # Расчет координат вектора приращения
+                    dv = (dv_len * norm_vector[0], dv_len * norm_vector[1])
                     # Вычисление нового вектора скорости после столкновения
-                    dot_product = self.v_x * collision_vector[0] + self.v_y * collision_vector[1]
-                    self.v_x -= 2 * dot_product * collision_vector[0]
-                    self.v_y -= 2 * dot_product * collision_vector[1]
-
-        # Проверка столкновения с другими прямоугольниками после обновления
-        for other_rect in rectangles:
-            if self is not other_rect:  # Исключаем текущий прямоугольник из проверки
-                if self.intersects(other_rect):
-                    # Вернуть прямоугольнику старые координаты
+                    self.v_x += dv[0]
+                    self.v_y += dv[1]
+                    # Возвращаем прямоугольнику старые координаты (чтобы не было наложения)
                     self.x = old_x
                     self.y = old_y
 
