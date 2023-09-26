@@ -60,21 +60,6 @@ class Rectangle:
                 self.y < other.y + other.height and
                 self.y + self.height > other.y)
 
-    def out_of_bound(self):
-        x, y = 0, 0
-
-        if self.x < 0:
-            x = self.x
-        elif self.x + self.width > 400:
-            x = self.x + self.width - 400
-
-        if self.y < 0:
-            y = self.y
-        elif self.y + self.height > 300:
-            y = self.y + self.height - 300
-
-        return x, y
-
 
 class App:
     def __init__(self):
