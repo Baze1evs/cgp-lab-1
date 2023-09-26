@@ -44,7 +44,7 @@ class Rectangle:
                     # Вычисление косинуса угла между текущим вектором скорости и вектором приращения
                     cosa = -(norm_vector[0] * self.v_x + norm_vector[1] * self.v_y) / v_len
                     # Вычисление длины вектора приращения
-                    dv_len = math.sqrt(2 * v_len**2 - 2 * v_len * (1 - 2 * cosa**2))
+                    dv_len = math.sqrt(2 * v_len**2 - 2 * v_len**2 * (1 - 2 * cosa**2))
                     # Расчет координат вектора приращения
                     dv = (dv_len * norm_vector[0], dv_len * norm_vector[1])
                     # Вычисление нового вектора скорости после столкновения
