@@ -3,6 +3,10 @@ import random
 import tkinter
 
 
+def vector_length(vec):
+    return math.sqrt(vec[0] ** 2 + vec[1] ** 2)
+
+
 class Rectangle:
     def __init__(self, x, y, width, height, v_x, v_y):
         self.x = x
@@ -114,4 +118,5 @@ class App:
 app = App()
 app.add_rectangle(0, 0, 50, 25, 2, 3)
 app.add_rectangle(300, 0, 50, 25, -2, 2)
+app.add_rectangle(200, 200, 50, 50, -10, -10)
 app.start()
